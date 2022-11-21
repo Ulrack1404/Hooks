@@ -1,12 +1,13 @@
 import React from "react";
 import CardWrapper from "../../common/Card";
 
-const WithPropsStyles = (Component) => (props) => {
-    return (
-        <CardWrapper>
-            <Component {...props} name="new Name" />
-        </CardWrapper>
-    );
+/* eslint-disable react/display-name */
+const withPropsStyles = (Component) => (props) => {
+  return (
+    <CardWrapper>
+      <Component {...props} name="new Name" />
+    </CardWrapper>
+  );
 };
 
-export default WithPropsStyles;
+export default withPropsStyles;

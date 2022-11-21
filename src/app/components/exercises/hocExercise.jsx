@@ -1,10 +1,55 @@
 import React from "react";
 import CollapseWrapper from "../common/collapse";
-import withFunctions from "./hocExerciseCopmonent/withFunctions";
-import SimpleComponent from "./hocExerciseCopmonent/simpleComponent";
+import PropTypes from "prop-types";
+import Divider from "../common/divider";
+import SmallTitle from "../common/typografy/smallTitle";
+import CardWrapper from "../common/Card";
+
+// Simple Component
+/* eslint-disable react/display-name */
+const SimpleComponent = ({ onLogin, onLogOut, isAuth }) => {
+    return isAuth ? (
+        <button className="btn btn-secondary" onClick={onLogOut}>
+            Выйти из системы
+        </button>
+    ) : (
+        <button className="btn btn-primary" onClick={onLogin}>
+            Войти
+        </button>
+    );
+};
+
+SimpleComponent.propTypes = {
+    onLogin: PropTypes.func,
+    onLogOut: PropTypes.func,
+    isAuth: PropTypes.bool
+};
+
+// HOC Component
+const withFunctions = (Component) => (props) => {
+    const handleLogin = () => {
+        localStorage.setItem("auth", "token");
+    };
+    const handleLogout = () => {
+        localStorage.removeItem("auth");
+    };
+    const isAuth = !!localStorage.getItem("auth");
+
+    return (
+        <CardWrapper>
+            <Component
+                isAuth={isAuth}
+                onLogOut={handleLogout}
+                onLogin={handleLogin}
+                {...props}
+            />
+        </CardWrapper>
+    );
+};
+// Component with HOC
+const ComponentWithHoc = withFunctions(SimpleComponent);
 
 const HocExercise = () => {
-    const ComponentWithHoc = withFunctions(SimpleComponent);
     return (
         <CollapseWrapper title="Упражнение">
             <p className="mt-3">
@@ -79,6 +124,8 @@ const HocExercise = () => {
                 <code>SimpleComponent</code> обновится после перезагрузки
                 страницы
             </p>
+            <Divider />
+            <SmallTitle>Решение</SmallTitle>
             <ComponentWithHoc />
         </CollapseWrapper>
     );
